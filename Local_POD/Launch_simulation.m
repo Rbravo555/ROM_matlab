@@ -4,7 +4,7 @@
 
 
 
-function L2 = ZZZ_HROM_Many_Clusters_CheapEvaluation(NumberOfClusters)
+function L2 = Launch_simulation(NumberOfClusters)
 
 if nargin<1
   clear all; close all; clc
