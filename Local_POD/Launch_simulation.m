@@ -149,6 +149,13 @@ weights = cell(size(Bases));
     [elements{i}, weights{i}] = HyperReduce(ResidualProjected{i});
  end
 
+%  %plotting minimization results
+%  figure
+%  for i=1:NumberOfClusters
+%      plot(ResidualProjected{i}' * ones( size(ResidualProjected{i},1), 1) - (ResidualProjected{i}(elements{i},:))' * weights{i} )
+%      pause
+%  end
+ 
 w_hrom = w;
 d_hrom = d;
 z_hrom = d_hrom;

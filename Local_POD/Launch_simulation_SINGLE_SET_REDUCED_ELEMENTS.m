@@ -145,6 +145,20 @@ end
 %% Hyper-reduction
 [elements, weights] = HyperReduce_SINGLE_SET_ELEMENTS(ResidualProjected);
 
+
+%  %plotting minimization results
+%  figure
+%  for i=1:NumberOfClusters
+%      plot(ResidualProjected{i}' * ones( size(ResidualProjected{i},1), 1) - (ResidualProjected{i}(elements,:))' * weights)
+%      pause
+%  end
+
+ 
+ %visualizing the selected elements in the domain
+ 
+ 
+ 
+
 w_hrom = w;
 d_hrom = d;
 z_hrom = d_hrom;
