@@ -1,4 +1,4 @@
-function [elements, weights] = HyperReduce_SINGLE_SET_ELEMENTS(ResidualProjected)
+function [elements, weights] = HyperReduce_SINGLE_SET_ELEMENTS_SINGLE_SET_WEIGHTS(ResidualProjected)
 
 for j=1:size(ResidualProjected,2)
     [U_svd,S_svd,~] = svd(ResidualProjected{j}, 'econ');

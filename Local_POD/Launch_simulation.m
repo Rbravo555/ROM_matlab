@@ -147,6 +147,8 @@ elements = cell(size(Bases));
 weights = cell(size(Bases));
  for i=1:size(ResidualProjected,2)
     [elements{i}, weights{i}] = HyperReduce(ResidualProjected{i});
+    %visualizing the selected elements in the domain
+    VisualizeSelectedElements(elements{i}, X)
  end
 
 %  %plotting minimization results

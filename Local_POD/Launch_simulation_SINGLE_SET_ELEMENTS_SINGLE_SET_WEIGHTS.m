@@ -4,7 +4,7 @@
 
 
 
-function L2 = Launch_simulation_SINGLE_SET_REDUCED_ELEMENTS(NumberOfClusters)
+function L2 = Launch_simulation_SINGLE_SET_ELEMENTS_SINGLE_SET_WEIGHTS(NumberOfClusters)
 
 if nargin<1
   clear all; close all; clc
@@ -143,7 +143,7 @@ end
 
 
 %% Hyper-reduction
-[elements, weights] = HyperReduce_SINGLE_SET_ELEMENTS(ResidualProjected);
+[elements, weights] = HyperReduce_SINGLE_SET_ELEMENTS_SINGLE_SET_WEIGHTS(ResidualProjected);
 
 
 %  %plotting minimization results
@@ -153,8 +153,8 @@ end
 %      pause
 %  end
 
- 
- %visualizing the selected elements in the domain
+%visualizing the selected elements in the domain
+VisualizeSelectedElements(elements, X)
  
  
  
