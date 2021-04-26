@@ -1,7 +1,7 @@
-function [elements, weights] = HyperReduce_SINGLE_SET_ELEMENTS(ResidualProjected)
+function [elements, weights, global_elements] = HyperReduce_SINGLE_SET_ELEMENTS_MANY_SETS_WEIGHTS(ResidualProjected)
 
 for j=1:size(ResidualProjected,2)
-    [U_svd,S_svd,V_svd] = svd(ResidualProjected{j}, 'econ');
+    [U_svd,S_svd,~] = svd(ResidualProjected{j}, 'econ');
 
     Sigma = diag(S_svd);
 
@@ -30,17 +30,21 @@ for j=1:size(ResidualProjected,2)
     DATA.IncludeSingularValuesF  = 0 ; % Singular Values are not included in the minimization norm           
     DATA.TOLFilterCandidatePoints = 1e-10;
     if j>1
-        DATA.IND_POINTS_CANDIDATES = elements;
+        DATA.IND_POINTS_CANDIDATES = global_elements;
     end
-    [elements,weights] = EmpiricalCubatureMethod_CANDcompl(U_svd,S_svd,W,DATA);   
+    [e,w] = EmpiricalCubatureMethod_CANDcompl(U_svd,S_svd,W,DATA);%EmpiricalCubatureMethod_CANDcompl or  EmpiricalCubatureMethod
+    elements{j} = e;
+    weights{j} = w;
+    if j==1
+       global_elements = e;
+    else
+       global_elements = unique([global_elements;e]);
+    end
     
-    %last cluster contains the set of elements that integrate the last
-    %basis(including as much as possible the elements that integrate other
-    %bases...) If true, this approach is not good enough!!
+    
+    
     
 end
-
-%  %  % naive way, many sets of elements and corresponding weights
 
 % W_svd = ones(size(ResidualProjected,1),1);
 % % Empirical Cubature Method

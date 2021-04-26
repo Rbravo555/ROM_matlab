@@ -4,7 +4,7 @@
 
 
 
-function L2 = Launch_simulation(NumberOfClusters)
+function L2 = Launch_simulation_SINGLE_SET_ELEMENTS_SINGLE_SET_WEIGHTS(NumberOfClusters)
 
 if nargin<1
   clear all; close all; clc
@@ -143,21 +143,22 @@ end
 
 
 %% Hyper-reduction
-elements = cell(size(Bases));
-weights = cell(size(Bases));
- for i=1:size(ResidualProjected,2)
-    [elements{i}, weights{i}] = HyperReduce(ResidualProjected{i});
-    %visualizing the selected elements in the domain
-    VisualizeSelectedElements(elements{i}, X)
- end
+[elements, weights] = HyperReduce_SINGLE_SET_ELEMENTS_SINGLE_SET_WEIGHTS(ResidualProjected);
+
 
 %  %plotting minimization results
 %  figure
 %  for i=1:NumberOfClusters
-%      plot(ResidualProjected{i}' * ones( size(ResidualProjected{i},1), 1) - (ResidualProjected{i}(elements{i},:))' * weights{i} )
+%      plot(ResidualProjected{i}' * ones( size(ResidualProjected{i},1), 1) - (ResidualProjected{i}(elements,:))' * weights)
 %      pause
 %  end
+
+%visualizing the selected elements in the domain
+VisualizeSelectedElements(elements, X)
  
+ 
+ 
+
 w_hrom = w;
 d_hrom = d;
 z_hrom = d_hrom;
@@ -184,7 +185,7 @@ for n = 2:nStep+1
     end
     
     
-    [M,K,C] = FEM_matricesPOD_hrom(X,T,referenceElement,current_basis, weights{idx_state}, elements{idx_state});
+    [M,K,C] = FEM_matricesPOD_hrom(X,T,referenceElement,current_basis, weights, elements);
     A = M + 1/2*a*dt*C;
     B = -a*dt*C;
         
@@ -199,41 +200,39 @@ end
 
 
 
-
-
 %% ErrorMeasure
 %L2 error ROM
 UP = sum((u_pod - u).^2);
 DOWN = sum(u.^2);
 L2 = sqrt(UP/DOWN);
-fprintf('\n\n\nL2 error: %e \n', L2);
+fprintf('\n\n\nL2 error rom: %e \n', L2);
 
 
 %L2 error H-ROM
 UP = sum((u_hrom - u).^2);
 DOWN = sum(u.^2);
 L2 = sqrt(UP/DOWN);
-fprintf('\n\n\nL2 error: %e \n', L2);
+fprintf('\n\n\nL2 error hrom: %e \n', L2);
 
 
-if plotting
-    %% Plot simulation results
-    fprintf('\n Press any key to see simulation results \n')
-    pause;
-    figure(55);clf;
-    for n = [1:round(nStep/30):nStep+1,nStep+1]
-        tt = (n-1)*dt;
-        plot(X,u(:,n),'k:', X,u_pod(:,n),'r', 'LineWidth',2)
-        axis([dom(1), dom(2),-0.25, max(u(:,1))+.2 ])
-        set(gcf,'color',[1,1,1])
-        l = legend('FOM', ['ROM']); 
-        set(l,'FontSize',24,'Location','NorthWest')
-        title(['t=',num2str(tt)])
-        pause(0.1)
-    end
-end
-
-
+% if plotting
+%     %% Plot simulation results
+%     fprintf('\n Press any key to see simulation results \n')
+%     pause;
+%     figure(55);clf;
+%     for n = [1:round(nStep/30):nStep+1,nStep+1]
+%         tt = (n-1)*dt;
+%         plot(X,u(:,n),'k:', X,u_pod(:,n),'r', 'LineWidth',2)
+%         axis([dom(1), dom(2),-0.25, max(u(:,1))+.2 ])
+%         set(gcf,'color',[1,1,1])
+%         l = legend('FOM', ['ROM']); 
+%         set(l,'FontSize',24,'Location','NorthWest')
+%         title(['t=',num2str(tt)])
+%         pause(0.1)
+%     end
+% end
+% 
+% 
 if plotting
     %% Plot simulation results
     fprintf('\n Press any key to see simulation results \n')

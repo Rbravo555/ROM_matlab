@@ -4,7 +4,7 @@
 
 
 
-function L2 = Launch_simulation_SINGLE_SET_REDUCED_ELEMENTS(NumberOfClusters)
+function L2 = Launch_simulation_SINGLE_SET_ELEMENTS_MANY_SETS_WEIGHTS(NumberOfClusters)
 
 if nargin<1
   clear all; close all; clc
@@ -143,7 +143,21 @@ end
 
 
 %% Hyper-reduction
-[elements, weights] = HyperReduce_SINGLE_SET_ELEMENTS(ResidualProjected);
+[elements, weights, global_elements] = HyperReduce_SINGLE_SET_ELEMENTS_MANY_SETS_WEIGHTS(ResidualProjected);
+
+
+%  %plotting minimization results
+%  figure
+%  for i=1:NumberOfClusters
+%      plot(ResidualProjected{i}' * ones( size(ResidualProjected{i},1), 1) - (ResidualProjected{i}(elements,:))' * weights)
+%      pause
+%  end
+
+%visualizing the selected elements in the domain
+VisualizeSelectedElements(global_elements, X)
+hold off
+ 
+ 
 
 w_hrom = w;
 d_hrom = d;
@@ -171,7 +185,7 @@ for n = 2:nStep+1
     end
     
     
-    [M,K,C] = FEM_matricesPOD_hrom(X,T,referenceElement,current_basis, weights, elements);
+    [M,K,C] = FEM_matricesPOD_hrom(X,T,referenceElement,current_basis, weights{idx_state}, elements{idx_state});
     A = M + 1/2*a*dt*C;
     B = -a*dt*C;
         
@@ -184,7 +198,7 @@ for n = 2:nStep+1
 
 end
 
-
+fprintf('\n\nNumber of selected elements: %d \n\n' , length(global_elements) );
 
 %% ErrorMeasure
 %L2 error ROM
@@ -198,7 +212,7 @@ fprintf('\n\n\nL2 error rom: %e \n', L2);
 UP = sum((u_hrom - u).^2);
 DOWN = sum(u.^2);
 L2 = sqrt(UP/DOWN);
-fprintf('\n\n\nL2 error hrom: %e \n', L2);
+fprintf('\n\n\nL2 error hrom: %d \n', L2);
 
 
 % if plotting

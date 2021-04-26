@@ -30,3 +30,10 @@ DATA.IncludeSingularValuesF  = 0 ; % Singular Values are not included in the min
 DATA.TOLFilterCandidatePoints = 1e-10;
 [elements,weights]= EmpiricalCubatureMethod(U_svd,S_svd,W_svd,DATA);
 
+
+%  %plotting minimization results
+%  figure
+%  plot(U_svd' * ones( size(U_svd,1), 1) - (U_svd(elements,:))' * weights)
+%  pause
+ 
+
