@@ -7,7 +7,7 @@ addpath('./Isomap')
 
 
 disp(' ')
-disp('This program solves a transient convection equation')
+disp('Thi s program solves a transient convection equation')
 disp('         u_t + a u_x = 0')
 
 % Reference element: numerical quadrature and shape functions
