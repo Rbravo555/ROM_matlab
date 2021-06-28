@@ -28,7 +28,6 @@ end
 
 id_neighbors = zeros(size(idx));
 
-
 if add_overlapping
     if number_of_clusters~=1
         % Add overlapping
@@ -50,12 +49,25 @@ if add_overlapping
 
             for i=1:N_neighbors
                 [~,idx_state] = pdist2(MyData.States{MyData.Neighbors{j}(i)}',Centers(j,:),'euclidean','Smallest',N_add);
-                MyData.States{j} = [MyData.States{j},MyData.States{MyData.Neighbors{j}(i)}(:,idx_state)];
+                if i==1
+                    snapshots_to_add{j}= MyData.States{MyData.Neighbors{j}(i)}(:,idx_state);
+                else
+                    snapshots_to_add{j} = [snapshots_to_add{j}, MyData.States{MyData.Neighbors{j}(i)}(:,idx_state)];
+                end
+                %MyData.States{j} = [MyData.States{j},MyData.States{MyData.Neighbors{j}(i)}(:,idx_state)];
             end
-
         end
+        
+        for j=1:size(MyData.States,2)
+            MyData.States{j} = [MyData.States{j}, snapshots_to_add{j}];
+        end
+        
     end
 end
+
+
+
+
 
 fprintf('\n\n\n')
 
